@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const API_URL = 'https://groupbuy-direct-one.onrender.com'
 
 type Product = {
   id: string
@@ -15,10 +14,10 @@ function App() {
   const [products, setProducts] = useState<Product[]>([])
 
   useEffect(() => {
-    // 1. Check if backend is alive
-    axios.get(API_URL)
+    // Check backend status via a server-side proxy to avoid CORS issues
+    axios.get('/.netlify/functions/api-status')
       .then(res => setApiStatus(res.data.message))
-      .catch(() => setApiStatus('API offline - wake it up by visiting the URL'))
+      .catch(() => setApiStatus('Status check failed'))
 
     // 2. Mock products for now - we'll replace this with real API call later
     setProducts([
